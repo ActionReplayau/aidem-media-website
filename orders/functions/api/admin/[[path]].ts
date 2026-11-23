@@ -190,7 +190,8 @@ const routes: Record<string, Handler> = {
       const left = o.total - o.refund_amount;
       const amount = b.amount ? Math.round(Number(b.amount)) : left;
       if (!(amount > 0 && amount <= left)) fail(400, `Refund must be between $0.01 and ${money(left)}.`);
-      const partial = amount < o.total || o.refund_amount > 0;
+      // Orders paid together share one payment, so always say how much, or the whole payment would be refunded.
+      const partial = amount < o.total || o.refund_amount > 0 || !!o.group_id;
       if (o.provider === 'stripe') {
         if (!o.payment_ref) fail(400, 'No Stripe payment found for this order. Refund it in Stripe.');
         await stripe.refund(env, o.payment_ref, partial ? amount : undefined);

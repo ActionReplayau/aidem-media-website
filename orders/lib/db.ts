@@ -99,7 +99,11 @@ let ready: Promise<void> | null = null;
 export function ensureSchema(env: Env): Promise<void> {
   if (!env.DB) throw new Error('D1 database is not connected. Add a D1 binding called DB in Cloudflare Pages settings.');
   if (!ready) {
-    ready = env.DB.batch(SCHEMA.map((s) => env.DB.prepare(s))).then(() => undefined);
+    ready = env.DB.batch(SCHEMA.map((s) => env.DB.prepare(s))).then(async () => {
+      // Added after launch: orders paid together in one checkout share a group_id.
+      await env.DB.prepare('ALTER TABLE orders ADD COLUMN group_id TEXT').run().catch(() => undefined);
+      await env.DB.prepare('CREATE INDEX IF NOT EXISTS orders_group ON orders(group_id)').run();
+    });
     ready.catch(() => { ready = null; });
   }
   return ready;
@@ -137,6 +141,7 @@ export interface Order {
   provider: string | null; provider_ref: string | null; payment_ref: string | null;
   created_at: string; paid_at: string | null; receipt_sent_at: string | null;
   download_sent_at: string | null; refunded_at: string | null; refund_amount: number; note: string | null;
+  group_id: string | null;
 }
 
 // Everything except the logo image itself.
