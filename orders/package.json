@@ -1,0 +1,14 @@
+{
+  "name": "aidem-media-orders",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev public --d1 DB=aidem-orders-local --binding ADMIN_PASSWORD=test TEST_PAYMENTS=on",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251101.0",
+    "typescript": "^5.6.0",
+    "wrangler": "^4.0.0"
+  }
+}
