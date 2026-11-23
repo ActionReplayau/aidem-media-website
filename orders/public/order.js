@@ -71,11 +71,12 @@
     $('s3-title').textContent = c.title;
     $('s3-cutoff').textContent = c.bulk
       ? `${c.performed ? 'Performed ' + c.performed + '. ' : ''}${c.usbCutoff ? `USB orders close at the end of ${c.usbCutoff}, then it's download only.` : ''}`
-      : `${c.performed ? 'Performed ' + c.performed + '. ' : ''}Download only.`;
+      : `${c.performed ? (c.usbOffered ? 'Performed ' : 'On ') + c.performed + '. ' : ''}Download only. ${c.downloadReady ? 'Your download link is emailed as soon as you pay.' : "We'll email your download link when the video is ready."}`;
     $('p-usb').textContent = money(c.prices.usb) + (c.nights.length ? ' a night' : '');
     $('p-dl').textContent = money(c.prices.download) + (c.nights.length ? ' a night' : '');
     $('opt-usb').hidden = !c.usbAvailable;
-    $('usb-closed').hidden = c.usbAvailable;
+    // "USB orders have closed" only shows when USBs were offered and the cut-off has passed.
+    $('usb-closed').hidden = c.usbAvailable || !c.usbOffered;
     $('student-fields').hidden = !c.bulk;
     $('nights-box').hidden = !c.nights.length;
     $('nights').innerHTML = c.nights.map((n) => `<label class="check"><input type="checkbox" name="night" value="${n.id}"> ${esc(n.label)}</label>`).join('');
@@ -162,7 +163,7 @@
       <div class="total"><span>Total (incl. GST)</span><span>${money(q.total)}</span></div>`;
     $('s4-next').textContent = v.format === 'usb'
       ? `Your USB will be sent home with class ${v.klass.toUpperCase()} after the concert.`
-      : c.bulk ? "We'll email your download link when the concert video is ready." : 'Your download link is emailed as soon as you pay.';
+      : c.bulk || !c.downloadReady ? "We'll email your download link when the concert video is ready." : 'Your download link is emailed as soon as you pay.';
     const btns = [];
     if (q.total === 0) btns.push(`<button class="btn pay" data-pay="stripe">Place order</button>`);
     else {
