@@ -58,7 +58,7 @@ export async function quote(env: Env, input: OrderInput, { strict, ip = '' }: { 
   if (nights.length > 1) {
     const ids = new Set((input.nights || []).map(Number));
     chosen = nights.filter((n) => ids.has(n.id));
-    if (!chosen.length) problems.push('tick at least one video');
+    if (!chosen.length) problems.push('tick at least one night');
   } else if (nights.length === 1) {
     chosen = nights;
   }

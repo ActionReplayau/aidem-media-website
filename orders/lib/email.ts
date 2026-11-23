@@ -81,7 +81,7 @@ export function invoiceLines(o: Order, c: Concert) {
     ['Date', longDate(o.paid_at || o.created_at)],
     ['Concert', concertName(c)],
   ];
-  if (o.nights_text) lines.push([o.qty > 1 ? 'Videos' : 'Video', o.nights_text]);
+  if (o.nights_text) lines.push([o.qty > 1 ? 'Nights' : 'Night', o.nights_text]);
   if (o.student) lines.push(['Student', o.student]);
   if (o.class) lines.push(['Class', o.class]);
   lines.push(['Format', o.format === 'usb' ? 'USB' : 'Download']);
