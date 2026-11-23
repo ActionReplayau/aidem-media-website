@@ -67,7 +67,7 @@ Free plan limit: 100 emails a day, 3,000 a month. "Send download links" sends up
 - **Bulk period** (until the "Last day for USB orders"): USB or download. Parents enter their eldest student's name and class. Download buyers get their link when you press **Send download links**.
 - **After that day**: download only, no student details. The download link (and the concert PDF, if added) is emailed at checkout.
 - **Download-only concerts**: untick "Take USB orders". Parents pick nights, give their eldest student's name and class (a backup so every order can be matched to a family), and pay. Leave the download link empty while it's a pre-order: parents are told the link comes when the video is ready, and you press **Send download links** once you add it. Anyone ordering after you add the link gets it straight away.
-- **Multi-night shows**: add nights to the concert. Parents tick nights and pay per night. Filter by night in admin.
+- **Multi-night shows, or two events sold together** (for example a Christmas concert and a graduation at the same school): add a row for each under "Nights or events". Parents tick the ones they want and pay for each in one checkout. Filter by night or event in admin. The download link can point to one Downloads page holding both videos.
 - **Invoice numbers** run AM-1001, AM-1002 and so on. Prices include GST; GST is the total divided by 11.
 - **Privacy**: set "Delete student names and classes after" on each concert. After that date, names and classes are removed automatically. Orders and receipts stay.
 

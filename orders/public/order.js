@@ -72,8 +72,8 @@
     $('s3-cutoff').textContent = c.bulk
       ? `${c.performed ? 'Performed ' + c.performed + '. ' : ''}${c.usbCutoff ? `USB orders close at the end of ${c.usbCutoff}, then it's download only.` : ''}`
       : `${c.performed ? (c.usbOffered ? 'Performed ' : 'On ') + c.performed + '. ' : ''}Download only. ${c.downloadReady ? 'Your download link is emailed as soon as you pay.' : "We'll email your download link when the video is ready."}`;
-    $('p-usb').textContent = money(c.prices.usb) + (c.nights.length ? ' a night' : '');
-    $('p-dl').textContent = money(c.prices.download) + (c.nights.length ? ' a night' : '');
+    $('p-usb').textContent = money(c.prices.usb) + (c.nights.length ? ' each' : '');
+    $('p-dl').textContent = money(c.prices.download) + (c.nights.length ? ' each' : '');
     $('opt-usb').hidden = !c.usbAvailable;
     // "USB orders have closed" only shows when USBs were offered and the cut-off has passed.
     $('usb-closed').hidden = c.usbAvailable || !c.usbOffered;
@@ -133,7 +133,7 @@
     if (!v.format) { $('live-total').innerHTML = ''; return; }
     const label = v.format === 'usb' ? 'USB' : 'Download';
     $('live-total').innerHTML = `
-      <div><span>${label}${q.qty > 1 ? ` × ${q.qty} nights` : ''}</span><span>${money(q.subtotal)}</span></div>
+      <div><span>${label}${q.qty > 1 ? ` × ${q.qty} videos` : ''}</span><span>${money(q.subtotal)}</span></div>
       ${q.discount ? `<div class="disc"><span>Discount (${esc(q.discountCode)})</span><span>−${money(q.discount)}</span></div>` : ''}
       <div class="total"><span>Total (incl. GST)</span><span>${money(q.total)}</span></div>`;
     if (v.discount) {
@@ -156,7 +156,7 @@
     const nightLabels = c.nights.filter((n) => v.nights.includes(n.id)).map((n) => n.label);
     $('summary').innerHTML = `
       <div><span>Concert</span><span>${esc(c.school)}, ${esc(c.title)}</span></div>
-      ${nightLabels.length ? `<div><span>${nightLabels.length > 1 ? 'Nights' : 'Night'}</span><span>${esc(nightLabels.join(', '))}</span></div>` : c.singleNight ? `<div><span>Night</span><span>${esc(c.singleNight)}</span></div>` : ''}
+      ${nightLabels.length ? `<div><span>${nightLabels.length > 1 ? 'Videos' : 'Video'}</span><span>${esc(nightLabels.join(', '))}</span></div>` : c.singleNight ? `<div><span>Video</span><span>${esc(c.singleNight)}</span></div>` : ''}
       ${c.askStudent ? `<div><span>Student</span><span>${esc(v.student)}, ${esc(v.klass.toUpperCase())}</span></div>` : ''}
       <div><span>Format</span><span>${v.format === 'usb' ? 'USB' : 'Download'}</span></div>
       <div><span>Email</span><span>${esc(v.email)}</span></div>
@@ -205,7 +205,7 @@
   $('order-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const v = formValues(), c = concert, problems = [];
-    if (c.nights.length && !v.nights.length) problems.push('tick at least one night');
+    if (c.nights.length && !v.nights.length) problems.push('tick at least one video');
     if (!v.format) problems.push('choose USB or download');
     if (c.askStudent && !v.student) problems.push("enter the eldest student's name");
     if (c.askStudent && !v.klass) problems.push('choose the class');

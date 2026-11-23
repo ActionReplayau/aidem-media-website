@@ -10,7 +10,7 @@ export async function getOrder(env: Env, id: string) {
 
 export function description(o: Pick<Order, 'format' | 'qty' | 'nights_text'>, c: Concert) {
   const fmt = o.format === 'usb' ? 'USB' : 'Download';
-  return `${c.school}, ${c.title} (${fmt}${o.qty > 1 ? ', ' + o.qty + ' nights' : o.nights_text ? ', ' + o.nights_text : ''})`;
+  return `${c.school}, ${c.title} (${fmt}${o.qty > 1 ? ', ' + o.qty + ' videos' : o.nights_text ? ', ' + o.nights_text : ''})`;
 }
 
 export async function pdfUrl(env: Env, origin: string, concertId: number) {

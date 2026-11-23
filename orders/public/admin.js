@@ -304,8 +304,8 @@
         </div>
 
         <div class="card">
-          <h2>Nights</h2>
-          <p class="muted small">Leave this empty for a one-night concert. Add each night for multi-night shows. Parents tick the nights they want and pay per night.</p>
+          <h2>Nights or events</h2>
+          <p class="muted small">Leave this empty for a single video. Add a row for each night of a multi-night show, or for each event sold together (for example Christmas Concert and Graduation). Parents tick the ones they want and pay for each.</p>
           <div class="stack" id="nights"></div>
           <div><button type="button" class="btn ghost sm" id="add-night">Add a night</button></div>
         </div>
@@ -350,7 +350,7 @@
     const addNight = (n = { id: 0, label: '' }) => {
       const div = document.createElement('div');
       div.className = 'nightrow';
-      div.innerHTML = `<input class="field" style="font:inherit;padding:10px 12px;border:1px solid var(--field);border-radius:4px;min-height:44px" placeholder="For example Tuesday 9 December" value="${esc(n.label)}" data-id="${n.id || ''}" aria-label="Night"><button type="button" class="btn ghost sm">Remove</button>`;
+      div.innerHTML = `<input class="field" style="font:inherit;padding:10px 12px;border:1px solid var(--field);border-radius:4px;min-height:44px" placeholder="For example Tuesday 9 December, or Graduation" value="${esc(n.label)}" data-id="${n.id || ''}" aria-label="Night"><button type="button" class="btn ghost sm">Remove</button>`;
       $('button', div).addEventListener('click', () => div.remove());
       nightBox.appendChild(div);
     };
