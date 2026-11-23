@@ -41,9 +41,10 @@
           <div class="total"><span>Total paid (incl. GST)</span><span>${esc(r.total)}</span></div>
         </div>
       </div>
+      ${r.others && r.others.length ? `<div class="card stack noprint"><strong>Also in this payment</strong><p class="small muted">Each concert has its own tax invoice, and each was emailed to you.</p>${r.others.map((x) => `<div class="row" style="justify-content:space-between"><span>${esc(x.orderNo)} · ${esc(x.concert)} · ${esc(x.total)}</span><a href="${esc(x.url)}">View tax invoice</a></div>`).join('')}</div>` : ''}
       <div class="row noprint"><button class="btn ghost" type="button" id="print">Print or save as PDF</button><a class="btn ghost" href="/">Order for another concert</a></div>`;
     document.getElementById('print').addEventListener('click', () => window.print());
-    try { sessionStorage.removeItem('am-draft-' + r.concertId); } catch {}
+    try { sessionStorage.removeItem('am-draft-' + r.concertId); sessionStorage.removeItem('am-cart'); } catch {}
   }
 
   load();

@@ -18,28 +18,42 @@ export async function pdfUrl(env: Env, origin: string, concertId: number) {
   return `${origin}/api/pdf/${concertId}?k=${k}`;
 }
 
+export async function getGroup(env: Env, o: Order): Promise<Order[]> {
+  if (!o.group_id) return [o];
+  return (await env.DB.prepare('SELECT * FROM orders WHERE group_id = ? ORDER BY rowid').bind(o.group_id).all<Order>()).results;
+}
+
 // Marks an order paid exactly once, gives it the next invoice number and emails the receipt.
+// Orders paid together in one checkout (same group_id) are all marked paid, each with its own invoice.
 // Safe to call more than once (Stripe webhook and the receipt page may both call it).
 export async function markPaid(env: Env, orderId: string, p: { provider: string; paymentRef: string | null; amount: number | null }, origin: string, waitUntil?: (p: Promise<unknown>) => void) {
-  const o = await getOrder(env, orderId);
-  if (!o) return null;
-  if (o.status !== 'pending') return o;
-  if (p.amount != null && p.amount !== o.total) {
-    console.error('Paid amount does not match order', orderId, p.amount, o.total);
-    await env.DB.prepare('UPDATE orders SET note = ? WHERE id = ?').bind(`Paid ${money(p.amount)} but order total was ${money(o.total)}. Check this order.`, orderId).run();
+  const lead = await getOrder(env, orderId);
+  if (!lead) return null;
+  const group = await getGroup(env, lead);
+  const pending = group.filter((o) => o.status === 'pending');
+  if (!pending.length) return lead;
+  const groupTotal = group.reduce((sum, o) => sum + o.total, 0);
+  if (p.amount != null && p.amount !== groupTotal) {
+    console.error('Paid amount does not match order', orderId, p.amount, groupTotal);
+    await env.DB.prepare('UPDATE orders SET note = ? WHERE id = ?').bind(`Paid ${money(p.amount)} but the order total was ${money(groupTotal)}. Check this order.`, orderId).run();
   }
-  const res = await env.DB.prepare(`UPDATE orders SET status = 'paid', order_no = ${NEXT_ORDER_NO_SQL},
-      paid_at = datetime('now'), provider = ?, payment_ref = COALESCE(?, payment_ref)
-      WHERE id = ? AND status = 'pending'`).bind(p.provider, p.paymentRef, orderId).run();
-  const paid = (await getOrder(env, orderId))!;
-  if (res.meta.changes === 1) {
-    if (paid.discount_code) {
-      await env.DB.prepare('UPDATE discounts SET uses = uses + 1 WHERE code = ?').bind(paid.discount_code).run();
+  const codesUsed = new Set<string>();
+  const jobs: Promise<unknown>[] = [];
+  for (const o of pending) {
+    const res = await env.DB.prepare(`UPDATE orders SET status = 'paid', order_no = ${NEXT_ORDER_NO_SQL},
+        paid_at = datetime('now'), provider = ?, payment_ref = COALESCE(?, payment_ref)
+        WHERE id = ? AND status = 'pending'`).bind(p.provider, p.paymentRef, o.id).run();
+    if (res.meta.changes !== 1) continue;
+    if (o.discount_code && !codesUsed.has(o.discount_code)) {
+      codesUsed.add(o.discount_code);
+      await env.DB.prepare('UPDATE discounts SET uses = uses + 1 WHERE code = ?').bind(o.discount_code).run();
     }
-    const job = sendReceipt(env, paid, origin).catch((e) => console.error('Receipt email failed', e));
-    if (waitUntil) waitUntil(job); else await job;
+    const paid = (await getOrder(env, o.id))!;
+    jobs.push(sendReceipt(env, paid, origin).catch((e) => console.error('Receipt email failed', e)));
   }
-  return paid;
+  const all = Promise.all(jobs);
+  if (waitUntil) waitUntil(all); else await all;
+  return (await getOrder(env, orderId))!;
 }
 
 export async function sendReceipt(env: Env, o: Order, origin: string) {
@@ -90,5 +104,10 @@ export async function publicView(env: Env, o: Order) {
       : linkNow ? 'Your download link is below, and in your email.' : "We'll email your download link when the concert video is ready.",
     downloadUrl: linkNow ? c.download_url : null,
     stillBulk: isBulk(c),
+    // Other events paid for in the same checkout, each with its own tax invoice.
+    others: await Promise.all((await getGroup(env, o)).filter((x) => x.id !== o.id).map(async (x) => {
+      const xc = await getConcert(env, x.concert_id);
+      return { orderNo: orderNo(x.order_no), concert: xc ? `${xc.school}, ${xc.title}` : '', total: money(x.total), url: `/receipt.html?o=${x.id}&t=${x.token}` };
+    })),
   };
 }

@@ -209,7 +209,7 @@
 
   // ---------- order detail ----------
   async function orderDialog(id) {
-    const { order: o, concert: c } = await api('orders/' + id);
+    const { order: o, concert: c, view } = await api('orders/' + id);
     const left = o.total - o.refund_amount;
     dlgBody.innerHTML = `
       <div class="row" style="justify-content:space-between"><h2>${esc(o.orderNo || 'Unpaid checkout')}</h2><button class="btn ghost sm" id="dlg-close">Close</button></div>
@@ -219,6 +219,7 @@
         <dt>Format</dt><dd>${o.format === 'usb' ? 'USB' : 'Download'}${o.phase === 'after' ? ' (ordered after USB orders closed)' : ''}</dd>
         <dt>Price</dt><dd>${money(o.subtotal)}${o.discount ? ` − ${money(o.discount)} (${esc(o.discount_code)})` : ''} = <strong>${money(o.total)}</strong> incl. GST</dd>
         <dt>Paid</dt><dd>${o.paid_at ? esc(when(o.paid_at)) + ' by ' + esc(o.provider) : 'Not paid'}</dd>
+        ${view && view.others && view.others.length ? `<dt>Paid together with</dt><dd>${view.others.map((x) => esc(x.orderNo + ' ' + x.concert)).join('<br>')}</dd>` : ''}
         ${o.refund_amount ? `<dt>Refunded</dt><dd>${money(o.refund_amount)} on ${esc(when(o.refunded_at))}</dd>` : ''}
         <dt>Receipt emailed</dt><dd>${o.receipt_sent_at ? esc(when(o.receipt_sent_at)) : 'No'}</dd>
         ${o.format === 'download' ? `<dt>Download link</dt><dd>${o.download_sent_at ? 'Sent ' + esc(when(o.download_sent_at)) : 'Not sent yet'}</dd>` : ''}

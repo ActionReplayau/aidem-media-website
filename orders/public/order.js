@@ -14,6 +14,9 @@
   let code = '';
   let quoteTimer = 0;
   let lastQuote = null;
+  // Other concerts the parent has added to their cart, to pay for in one go.
+  const getCart = () => store.get('am-cart') || [];
+  const setCart = (c) => store.set('am-cart', c);
 
   async function api(path, body) {
     const res = await fetch(path, body ? { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) } : {});
@@ -117,8 +120,13 @@
   }
 
   function restoreDraft() {
-    const d = store.get('am-draft-' + concert.id);
-    if (!d) return;
+    let d = store.get('am-draft-' + concert.id);
+    if (!d) {
+      // Ordering another concert: carry over the details they already typed.
+      const last = getCart().slice(-1)[0];
+      if (!last) return;
+      d = { student: last.student, klass: last.klass, email: last.email };
+    }
     if (d.format) { const r = document.querySelector(`input[name="format"][value="${d.format}"]`); if (r && !r.closest('[hidden]')) r.checked = true; }
     (d.nights || []).forEach((id) => { const i = document.querySelector(`input[name="night"][value="${id}"]`); if (i) i.checked = true; });
     $('student').value = d.student || '';
@@ -151,31 +159,67 @@
 
   function scheduleQuote() { clearTimeout(quoteTimer); quoteTimer = setTimeout(refreshQuote, 250); }
 
-  function showReview() {
+  // The order being edited now, in the shape the cart keeps.
+  function currentItem() {
     const c = concert, v = formValues(), q = lastQuote;
     const nightLabels = c.nights.filter((n) => v.nights.includes(n.id)).map((n) => n.label);
+    return {
+      ...v,
+      school: c.school, title: c.title, askStudent: c.askStudent,
+      videos: nightLabels.length ? nightLabels.join(', ') : c.singleNight || '',
+      multi: nightLabels.length > 1,
+      subtotal: q.subtotal, discountAmt: q.discount, discountCode: q.discountCode, total: q.total,
+      next: v.format === 'usb'
+        ? `USB sent home with class ${v.klass.toUpperCase()} after the concert.`
+        : c.bulk || !c.downloadReady ? "Download link emailed when the video is ready." : 'Download link emailed as soon as you pay.',
+    };
+  }
+
+  function itemRows(it) {
+    return `
+      ${it.videos ? `<div><span>${it.multi ? 'Nights' : 'Night'}</span><span>${esc(it.videos)}</span></div>` : ''}
+      ${it.askStudent ? `<div><span>Student</span><span>${esc(it.student)}, ${esc(it.klass.toUpperCase())}</span></div>` : ''}
+      <div><span>Format</span><span>${it.format === 'usb' ? 'USB' : 'Download'}</span></div>
+      ${it.discountAmt ? `<div class="disc"><span>Discount (${esc(it.discountCode)})</span><span>−${money(it.discountAmt)}</span></div>` : ''}
+      <div><span>Price</span><span>${money(it.total)}</span></div>`;
+  }
+
+  function showReview() {
+    const cur = currentItem();
+    const others = getCart().filter((i) => i.concertId !== cur.concertId);
+    const items = [...others, cur];
+    const total = items.reduce((sum, i) => sum + i.total, 0);
+    const several = items.length > 1;
     $('summary').innerHTML = `
-      <div><span>Concert</span><span>${esc(c.school)}, ${esc(c.title)}</span></div>
-      ${nightLabels.length ? `<div><span>${nightLabels.length > 1 ? 'Nights' : 'Night'}</span><span>${esc(nightLabels.join(', '))}</span></div>` : c.singleNight ? `<div><span>Night</span><span>${esc(c.singleNight)}</span></div>` : ''}
-      ${c.askStudent ? `<div><span>Student</span><span>${esc(v.student)}, ${esc(v.klass.toUpperCase())}</span></div>` : ''}
-      <div><span>Format</span><span>${v.format === 'usb' ? 'USB' : 'Download'}</span></div>
-      <div><span>Email</span><span>${esc(v.email)}</span></div>
-      ${q.discount ? `<div><span>Subtotal</span><span>${money(q.subtotal)}</span></div><div class="disc"><span>Discount (${esc(q.discountCode)})</span><span>−${money(q.discount)}</span></div>` : ''}
-      <div class="total"><span>Total (incl. GST)</span><span>${money(q.total)}</span></div>`;
-    $('s4-next').textContent = v.format === 'usb'
-      ? `Your USB will be sent home with class ${v.klass.toUpperCase()} after the concert.`
-      : c.bulk || !c.downloadReady ? "We'll email your download link when the concert video is ready." : 'Your download link is emailed as soon as you pay.';
+      ${items.map((it) => `
+        <div class="cart-item"><span><strong>${esc(it.school)}, ${esc(it.title)}</strong></span>${it === cur ? '' : `<button type="button" class="linkbtn" data-remove="${it.concertId}">Remove</button>`}</div>
+        ${itemRows(it)}`).join('<hr>')}
+      <div><span>Email</span><span>${esc(cur.email)}</span></div>
+      <div class="total"><span>Total (incl. GST)</span><span>${money(total)}</span></div>`;
+    $('s4-next').textContent = several
+      ? 'Each concert gets its own tax invoice. ' + items.map((i) => `${i.title}: ${i.next}`).join(' ')
+      : cur.next.replace(/^USB sent/, 'Your USB will be sent').replace(/^Download link emailed/, 'Your download link is emailed').replace('emailed when the video is ready', "emailed when the concert video is ready");
     const btns = [];
-    if (q.total === 0) btns.push(`<button class="btn pay" data-pay="stripe">Place order</button>`);
+    if (total === 0) btns.push(`<button class="btn pay" data-pay="stripe">Place order</button>`);
     else {
-      if (config.stripe) btns.push(`<button class="btn pay" data-pay="stripe">Pay ${money(q.total)} by card, Apple Pay or Google Pay</button>`);
-      if (config.paypal) btns.push(`<button class="btn pay" data-pay="paypal">Pay ${money(q.total)} with PayPal</button>`);
+      if (config.stripe) btns.push(`<button class="btn pay" data-pay="stripe">Pay ${money(total)} by card, Apple Pay or Google Pay</button>`);
+      if (config.paypal) btns.push(`<button class="btn pay" data-pay="paypal">Pay ${money(total)} with PayPal</button>`);
       if (config.test) btns.push(`<button class="btn ghost" data-pay="test">Test payment (no charge)</button>`);
       if (!btns.length) btns.push(`<p class="banner warn">Online payment isn't switched on yet. Please check back soon.</p>`);
     }
+    if (items.length < 5) btns.push(`<button class="btn ghost" type="button" id="add-another">Add another concert to this order</button>`);
     $('pay-buttons').innerHTML = btns.join('');
     $('pay-err').hidden = true;
     go(4);
+  }
+
+  // Puts the order being edited into the cart (replacing an older copy of the same concert).
+  function saveToCart() {
+    const cur = currentItem();
+    const cart = getCart().filter((i) => i.concertId !== cur.concertId);
+    cart.push(cur);
+    setCart(cart);
+    return cart;
   }
 
   // ----- events -----
@@ -220,14 +264,29 @@
     } catch (err) { $('order-err').textContent = err.message; $('order-err').hidden = false; }
   });
 
+  $('summary').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-remove]');
+    if (!b) return;
+    setCart(getCart().filter((i) => String(i.concertId) !== b.dataset.remove));
+    showReview();
+  });
+
   $('pay-buttons').addEventListener('click', async (e) => {
+    if (e.target.closest('#add-another')) {
+      saveToCart();
+      concert = null;
+      go(1);
+      return;
+    }
     const b = e.target.closest('[data-pay]');
     if (!b) return;
     document.querySelectorAll('[data-pay]').forEach((x) => { x.disabled = true; });
     const original = b.textContent;
     b.textContent = 'Please wait…';
     try {
-      const r = await api('/api/checkout', { ...formValues(), provider: b.dataset.pay });
+      const email = formValues().email;
+      const items = saveToCart().map((i) => ({ concertId: i.concertId, code: i.code, format: i.format, nights: i.nights, student: i.student, klass: i.klass, email, discount: i.discount }));
+      const r = await api('/api/checkout', { items, provider: b.dataset.pay });
       window.location.href = r.redirect;
     } catch (err) {
       $('pay-err').textContent = err.message;
