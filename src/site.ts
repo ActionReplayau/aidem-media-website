@@ -16,13 +16,13 @@ export const site = {
 
   // While this is true, wording still waiting on Matt is highlighted in yellow.
   // Set it to false once all placeholder text has been replaced.
-  showPlaceholders: true,
+  showPlaceholders: false,
 };
 
 export const services = [
   { slug: 'school-concerts', name: 'School concerts', image: 'school-concerts.jpg',
     alt: 'An audience watching students perform on a brightly lit school concert stage',
-    blurb: "Multi-camera filming of your school's concert, with easy online ordering for parents." },
+    blurb: "Your whole concert filmed from start to finish, with easy online ordering for parents." },
   { slug: 'graduations', name: 'Graduations', image: 'graduations.jpg',
     alt: 'A graduation night on a school stage, filmed from the back of the theatre',
     blurb: "Every student's moment on stage, captured and ready to share with families." },
