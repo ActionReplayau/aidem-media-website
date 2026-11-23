@@ -24,6 +24,15 @@ Phone, email, ABN, the concert order link and the testimonial all live in `src/s
 
 Photos are in `public/images/`. Old Wix addresses are redirected in `public/_redirects`.
 
+## Contact form
+
+The form on /contact/ posts to `functions/api/contact.js`, which emails the enquiry through Resend.
+Set these under Cloudflare Pages > aidem-media-website > Settings > Variables and secrets:
+
+- `RESEND_API_KEY` (secret, required)
+- `TO_EMAIL` (optional, default info@aidemmedia.com.au)
+- `FROM_EMAIL` (optional, default website@aidemmedia.com.au; must be on a domain verified in Resend)
+
 ## Cloudflare Pages settings
 
 - Framework preset: Astro

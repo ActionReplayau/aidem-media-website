@@ -152,3 +152,24 @@ footer .small { grid-column: 1 / -1; font-size: 0.8rem; border-top: 1px solid va
   .hero-img { aspect-ratio: 3/2 }
 }
 @media (prefers-reduced-motion: no-preference) { .tile h3 { transition: color .2s } }
+
+/* Privacy policy and other long text */
+.policy { display: grid; gap: 16px; max-width: 760px; margin-inline: 0 }
+.policy h2 { font-size: 1.6rem; margin-top: 28px }
+.policy h2:first-child { margin-top: 0 }
+.policy ul { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; max-width: 62ch }
+
+/* Contact form */
+.contact-form { display: grid; gap: 18px; background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: clamp(20px, 4vw, 36px); max-width: 760px }
+.contact-form h2 { font-size: 1.8rem }
+.field-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px }
+.field { display: grid; gap: 6px; min-width: 0 }
+.field label { font-weight: 600; font-size: 0.92rem }
+.field label span { font-weight: 400; color: var(--muted) }
+.field input, .field select, .field textarea { font: inherit; font-size: 1rem; color: var(--fg); background: var(--bg); border: 1px solid #B9B2A4; border-radius: 4px; padding: 11px 12px; width: 100% }
+.field input:focus, .field select:focus, .field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent) }
+.field textarea { resize: vertical }
+.contact-form button { cursor: pointer; font-family: inherit }
+.form-error { background: #FBE6E6; color: #8A1F1F; border-radius: 4px; padding: 12px 16px }
+.trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden }
+@media (max-width: 760px) { .field-row { grid-template-columns: minmax(0, 1fr) } }
