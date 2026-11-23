@@ -4,7 +4,7 @@
 // Settings (Cloudflare Pages > aidem-media-website > Settings > Variables and secrets):
 //   RESEND_API_KEY  (secret, required)
 //   TO_EMAIL        (optional, default info@aidemmedia.com.au)
-//   FROM_EMAIL      (optional, default website@cloud.actionreplay.com.au, must be on a domain verified in Resend)
+//   FROM_EMAIL      (optional, default website@aidemmedia.com.au, must be on a domain verified in Resend)
 
 const EVENT_TYPES = ['School concert', 'Graduation', 'Dance concert', 'Corporate event', 'Funeral', 'Something else'];
 
@@ -57,7 +57,7 @@ export async function onRequestPost({ request, env }) {
     method: 'POST',
     headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: `Aidem Media website <${env.FROM_EMAIL || 'website@cloud.actionreplay.com.au'}>`,
+      from: `Aidem Media website <${env.FROM_EMAIL || 'website@aidemmedia.com.au'}>`,
       to: [env.TO_EMAIL || 'info@aidemmedia.com.au'],
       reply_to: email,
       subject: `Website enquiry: ${eventType} (${name})`,

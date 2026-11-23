@@ -31,7 +31,7 @@ Set these under Cloudflare Pages > aidem-media-website > Settings > Variables an
 
 - `RESEND_API_KEY` (secret, required)
 - `TO_EMAIL` (optional, default info@aidemmedia.com.au)
-- `FROM_EMAIL` (optional, default website@cloud.actionreplay.com.au; must be on a domain verified in Resend)
+- `FROM_EMAIL` (optional, default website@aidemmedia.com.au; must be on a domain verified in Resend)
 
 ## Cloudflare Pages settings
 
