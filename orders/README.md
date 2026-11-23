@@ -49,15 +49,14 @@ Add each of these in **Settings** > **Variables and secrets** (type Secret), the
 - `PAYPAL_MODE` (Text): `sandbox` while testing, `live` for real.
 
 **Resend** (receipts and download links). resend.com > API Keys.
-- `RESEND_API_KEY`
-- `EMAIL_FROM` (Text): for example `Aidem Media <orders@aidemmedia.com.au>`. This needs the domain verified in Resend first (DNS records, ask before changing DNS). Until then emails only reach your own Resend sign-up address.
+- `RESEND_API_KEY`: create a new key just for ordering (Sending access only).
+- `EMAIL_FROM` (Text): `Aidem Media <orders@aidemmedia.com.au>`. The aidemmedia.com.au domain is already verified in Resend (23 Nov 2026), so no DNS changes are needed.
 
 Free plan limit: 100 emails a day, 3,000 a month. "Send download links" sends up to 90 at a time; send the rest the next day.
 
 ## Going live checklist
 
 - [ ] Full test order with real Stripe and PayPal (refund it afterwards in admin)
-- [ ] Resend domain verified so receipts don't land in spam
 - [ ] `TEST_PAYMENTS` removed
 - [ ] Custom domain `orders.aidemmedia.com.au` added under Custom domains (needs a DNS record, ask first)
 - [ ] Privacy policy link in `lib/business.ts` points at the live website
