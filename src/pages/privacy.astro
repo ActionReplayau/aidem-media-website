@@ -1,14 +1,62 @@
 ---
 import Base from '../layouts/Base.astro';
+import Ph from '../components/Ph.astro';
 import { site } from '../site';
 ---
-<Base title="Privacy policy" description="How Aidem Media handles your personal information." current="privacy">
+<Base title="Privacy policy" description="How Aidem Media collects, uses and protects your personal information." current="privacy">
   <section class="hero">
     <div class="wrap stack">
       <p class="crumb"><a href="/">Home</a> / Privacy policy</p>
       <h1>Privacy policy</h1>
-      <p class="lead"><span class="ph">Placeholder. Matt to supply or approve the full privacy policy before this site goes live.</span></p>
-      <p>Questions about privacy? Email <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+      <p class="lead">How Aidem Media Pty Ltd (ABN {site.abn}) collects, uses and looks after your personal information.</p>
+      <p class="crumb">Last updated <Ph>23 November 2026</Ph></p>
+    </div>
+  </section>
+
+  <section class="no-top">
+    <div class="wrap policy">
+      <h2>What we collect</h2>
+      <p>We only collect what we need to film your event and deliver your video.</p>
+      <ul>
+        <li><strong>Contact details</strong>: your name, email address and phone number when you book us, order a video or get in touch.</li>
+        <li><strong>Concert orders</strong>: the name and class of the eldest student in the family, so we can match the order to the right school and send USBs home in the right class.</li>
+        <li><strong>Order details</strong>: what you ordered, the amount paid and your order number.</li>
+        <li><strong>Event footage</strong>: video and audio of the events we're booked to film, which may show students, performers, guests and speakers.</li>
+      </ul>
+
+      <h2>Payments</h2>
+      <p>Payments are handled by our payment providers (such as Stripe and PayPal). We never see or store your full card details.</p>
+
+      <h2>How we use it</h2>
+      <ul>
+        <li>To process your order and email your receipt and tax invoice.</li>
+        <li>To deliver your video, by USB or download link.</li>
+        <li>To answer your questions and arrange bookings.</li>
+      </ul>
+      <p>We don't sell your information, and we don't use it for marketing unless you ask us to.</p>
+
+      <h2>Filming at schools and events</h2>
+      <p>We film school and dance concerts and graduations at the request of, and with the permission of, the school or organiser. Concert videos are only available to families of that school or dance school, and each concert is protected by its own access code. If you have a concern about a child appearing in a video, please contact the school or us.</p>
+      <p>Funeral and corporate videos are shared only with the client who booked us, by private download link.</p>
+
+      <h2>Who we share it with</h2>
+      <p>We share information only with the services we use to run the business: payment providers, our email provider for receipts and download links, and our hosting and file storage providers. Some of these providers store data outside Australia, for example in the United States. We may also share information if the law requires it.</p>
+
+      <h2>How long we keep it</h2>
+      <ul>
+        <li>Student names and classes are deleted <Ph>within 12 months</Ph> after the concert.</li>
+        <li>Corporate videos are deleted from our download service once the client has downloaded them.</li>
+        <li>Order and payment records are kept for as long as tax law requires.</li>
+      </ul>
+
+      <h2>Keeping it safe</h2>
+      <p>We use reputable providers, secure (HTTPS) connections and password-protected admin access, and we limit who can see your information.</p>
+
+      <h2>Your choices</h2>
+      <p>You can ask to see or correct the information we hold about you, or ask us to delete it, by emailing <a href={`mailto:${site.email}`}>{site.email}</a>. We'll reply within 30 days.</p>
+
+      <h2>Questions or complaints</h2>
+      <p>Contact us first at <a href={`mailto:${site.email}`}>{site.email}</a> or {site.phone}. If you're not happy with our response, you can contact the Office of the Australian Information Commissioner at <a href="https://www.oaic.gov.au">oaic.gov.au</a>.</p>
     </div>
   </section>
 </Base>
