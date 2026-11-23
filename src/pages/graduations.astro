@@ -1,0 +1,22 @@
+---
+import ServicePage from '../components/ServicePage.astro';
+import Ph from '../components/Ph.astro';
+---
+<ServicePage slug="graduations" heading="Graduation night,<br>every student on stage." description="Graduation and Grade 6 farewell filming for schools in Melbourne's south-east." showOrder bookLabel="Book your graduation">
+  <Ph slot="lead">From the walk across the stage to the final speech, we film the whole night so families can watch it again.</Ph>
+
+  <section class="no-top">
+    <div class="wrap stack" style="gap:32px">
+      <h2>What's included</h2>
+      <div class="facts">
+        <div><span class="label">Cost to the school</span><p>Nothing. Parents order and pay for their own copy.</p></div>
+        <div><span class="label">Filming</span><p><Ph>The full ceremony, including presentations and speeches.</Ph></p></div>
+        <div><span class="label">Ordering</span><p><Ph>Parents order online using the link sent home from school.</Ph></p></div>
+        <div><span class="label">Delivery</span><p><Ph>Delivered by download, ready to watch and share with family.</Ph></p></div>
+      </div>
+    </div>
+  </section>
+
+  <Fragment slot="cta-heading">Graduation coming up?</Fragment>
+  <Ph slot="cta-text">Send us the date and venue and we'll take care of the rest.</Ph>
+</ServicePage>

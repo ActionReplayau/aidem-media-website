@@ -1,0 +1,8 @@
+# Old Wix addresses -> new pages (Cloudflare Pages reads this file)
+/dance-school-concerts              /dance-concerts/   301
+/corporate-video-services           /corporate/        301
+/copy-of-corporate-video-services   /funerals/         301
+/wedding-videography                /                  301
+/copy-of-film-conversion            https://actionreplay.com.au  301
+/cd-dvd-usb-duplication             https://actionreplay.com.au  301
+/postal                             https://actionreplay.com.au  301

@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import { site, services } from '../site';
+
+interface Props {
+  slug: string;
+  heading: string;
+  description: string;
+  showOrder?: boolean;
+  bookLabel?: string;
+}
+const { slug, heading, description, showOrder = false, bookLabel = 'Book filming' } = Astro.props;
+const svc = services.find((s) => s.slug === slug)!;
+---
+<Base title={svc.name} description={description} current={slug}>
+  <section class="hero">
+    <div class="wrap">
+      <p class="crumb"><a href="/">Home</a> / {svc.name}</p>
+      <span class="label">{svc.name}</span>
+      <h1 set:html={heading} />
+      <p class="lead"><slot name="lead" /></p>
+      <div class="actions">
+        {showOrder && <a class="btn" href={site.orderUrl}>Order your video</a>}
+        <a class:list={['btn', { ghost: showOrder }]} href="/contact/">{bookLabel}</a>
+      </div>
+      <img class="hero-img" src={`/images/${svc.image}`} alt={svc.alt} width="1200" height="514" />
+    </div>
+  </section>
+
+  <slot />
+
+  <section class="band">
+    <div class="wrap grid">
+      <div class="stack">
+        <span class="label">Booking</span>
+        <h2><slot name="cta-heading" /></h2>
+      </div>
+      <div class="stack">
+        <p><slot name="cta-text" /></p>
+        <div class="actions">
+          <a class="btn" href="/contact/">Get in touch</a>
+          <a class="btn on-dark" href={site.phoneHref}>Call {site.phone}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

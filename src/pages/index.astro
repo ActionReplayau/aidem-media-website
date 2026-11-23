@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import Ph from '../components/Ph.astro';
+import { site, services, testimonial } from '../site';
+const [first, ...rest] = services;
+---
+<Base title="Event filming in Melbourne's south-east" description="School concerts, graduations, dance concerts, corporate events and funerals, filmed by Aidem Media in Beaconsfield VIC." current="home">
+  <section class="hero-photo">
+    <img src="/images/hero.jpg" alt="A video camera at the back of an empty school theatre, its screen framing the stage set" width="1094" height="547" fetchpriority="high" />
+    <div class="wrap">
+      <div class="copy">
+        <span class="label">Event filming · {site.location}</span>
+        <h1>Filming the nights people want to keep.</h1>
+        <p class="lead"><Ph>School concerts, graduations, dance concerts, corporate events and funerals, filmed with care and delivered by download.</Ph></p>
+        <div class="actions">
+          <a class="btn" href={site.orderUrl}>Order your concert video</a>
+          <a class="btn on-dark" href="/contact/">Book filming</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>What we film</h2>
+        <a class="btn ghost btn-sm" href="/contact/">Book filming</a>
+      </div>
+      <div class="tiles">
+        <a class="tile wide" href={`/${first.slug}/`}>
+          <img src={`/images/${first.image}`} alt={first.alt} loading="lazy" width="900" height="385" />
+          <div class="tile-body"><h3>{first.name}</h3><p><Ph>{first.blurb}</Ph></p></div>
+        </a>
+        {rest.map((s) => (
+          <a class="tile" href={`/${s.slug}/`}>
+            <img src={`/images/${s.image}`} alt={s.alt} loading="lazy" width="900" height="600" />
+            <div class="tile-body"><h3>{s.name}</h3><p><Ph>{s.blurb}</Ph></p></div>
+          </a>
+        ))}
+        <a class="tile full" href={site.actionReplayUrl}>
+          <img src="/images/conversions.jpg" alt="A stack of hand-labelled school speech night VHS tapes" loading="lazy" width="800" height="600" />
+          <div class="tile-body">
+            <span class="label">From our sister business, Action Replay</span>
+            <h3>VHS, film and audio transfers</h3>
+            <p>Old video tapes, cine film, audio recordings and photos converted to digital so you can enjoy and share them again.</p>
+            <span class="go-out">Visit actionreplay.com.au</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap grid">
+      <div class="stack">
+        <span class="label">Concert orders</span>
+        <h2>Free for schools. Parents order online.</h2>
+        <p>Schools pay nothing. Parents order their own copy of the concert, so there's no cash or forms for the school office.</p>
+        <div><a class="btn" href={site.orderUrl}>Start an order</a></div>
+      </div>
+      <ol class="steps">
+        <li><div><strong>Open the order page</strong><p><Ph>Use the link or QR code on the note sent home from school.</Ph></p></div></li>
+        <li><div><strong>Choose your school's concert</strong><p><Ph>Each concert is listed by school and date.</Ph></p></div></li>
+        <li><div><strong>Pay online</strong><p><Ph>Pay securely by card. Your receipt is emailed straight away.</Ph></p></div></li>
+        <li><div><strong>Download your video</strong><p><Ph>Your download link arrives by email once the concert is edited.</Ph></p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap split">
+      <div class="stack">
+        <span class="label">About</span>
+        <h2>20 years behind the camera.</h2>
+        <p><Ph>Aidem Media is a Beaconsfield-based video business with more than two decades of experience in production and media. Add a short paragraph here in your own words.</Ph></p>
+      </div>
+      <figure class="quote">
+        <blockquote>{testimonial.quote}</blockquote>
+        <figcaption>{testimonial.name} · {testimonial.source}</figcaption>
+      </figure>
+    </div>
+  </section>
+</Base>

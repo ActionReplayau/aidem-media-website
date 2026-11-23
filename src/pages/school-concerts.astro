@@ -1,0 +1,22 @@
+---
+import ServicePage from '../components/ServicePage.astro';
+import Ph from '../components/Ph.astro';
+---
+<ServicePage slug="school-concerts" heading="Your school concert,<br>filmed and ready to order." description="School concert filming in Melbourne's south-east. Free for schools, with simple online ordering for parents." showOrder bookLabel="Book us for your school">
+  <Ph slot="lead">We film the whole performance and give parents a simple way to order their copy, with no forms or cash handling for the school office.</Ph>
+
+  <section class="no-top">
+    <div class="wrap stack" style="gap:32px">
+      <h2>For schools</h2>
+      <div class="facts">
+        <div><span class="label">Cost to the school</span><p>Nothing. Parents order and pay for their own copy.</p></div>
+        <div><span class="label">On the night</span><p><Ph>We set up at the back of the hall and film the whole concert without getting in anyone's way.</Ph></p></div>
+        <div><span class="label">Ordering</span><p><Ph>We give you a note to send home with the link to order. Parents order online.</Ph></p></div>
+        <div><span class="label">Delivery</span><p><Ph>Parents receive their video by download, ready to watch and keep.</Ph></p></div>
+      </div>
+    </div>
+  </section>
+
+  <Fragment slot="cta-heading">Planning a concert this year?</Fragment>
+  <Ph slot="cta-text">Tell us your date and venue and we'll send through what's included and how parents order.</Ph>
+</ServicePage>

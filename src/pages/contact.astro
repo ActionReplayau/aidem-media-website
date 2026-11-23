@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import Ph from '../components/Ph.astro';
+import { site } from '../site';
+---
+<Base title="Contact" description="Contact Aidem Media in Beaconsfield VIC to book event filming." current="contact">
+  <section class="hero">
+    <div class="wrap">
+      <p class="crumb"><a href="/">Home</a> / Contact</p>
+      <span class="label">Contact</span>
+      <h1>Let's talk about<br>your event.</h1>
+      <p class="lead"><Ph>Tell us the date, the venue and what you'd like filmed. We'll get back to you with what's included and a price.</Ph></p>
+    </div>
+  </section>
+  <section class="no-top">
+    <div class="wrap stack" style="gap:40px">
+      <div class="contact-list">
+        <div><span class="label">Phone</span><a href={site.phoneHref}>{site.phone}</a></div>
+        <div><span class="label">Email</span><a href={`mailto:${site.email}`}>{site.email}</a></div>
+        <div><span class="label">Based in</span><p>{site.location}</p></div>
+      </div>
+      <div class="notice">
+        <strong>Ordering a concert video?</strong>
+        <p>Parents can order directly online. <a href={site.orderUrl}>Go to concert orders</a>.</p>
+      </div>
+      <div class="notice">
+        <strong>Converting old tapes, film or photos?</strong>
+        <p>That's our sister business. <a href={site.actionReplayUrl}>Visit Action Replay</a>.</p>
+      </div>
+    </div>
+  </section>
+</Base>

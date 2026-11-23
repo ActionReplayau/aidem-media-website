@@ -1,0 +1,22 @@
+---
+import ServicePage from '../components/ServicePage.astro';
+import Ph from '../components/Ph.astro';
+---
+<ServicePage slug="corporate" heading="Conferences, presentations<br>and functions, filmed." description="Corporate event filming in Melbourne's south-east: conferences, presentations and functions, delivered privately." bookLabel="Get a quote">
+  <Ph slot="lead">We film your event and deliver the finished video privately, ready to share with your team or clients.</Ph>
+
+  <section class="no-top">
+    <div class="wrap stack" style="gap:32px">
+      <h2>How it works</h2>
+      <div class="facts">
+        <div><span class="label">Events</span><p><Ph>Conferences, presentations, training sessions and functions.</Ph></p></div>
+        <div><span class="label">On the day</span><p><Ph>Professional cameras and sound, set up before your guests arrive.</Ph></p></div>
+        <div><span class="label">Delivery</span><p>Delivered by private download link.</p></div>
+        <div><span class="label">Privacy</span><p>Files are removed once you've downloaded them.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <Fragment slot="cta-heading">Have an event coming up?</Fragment>
+  <Ph slot="cta-text">Tell us the date, venue and what you need filmed, and we'll send a quote.</Ph>
+</ServicePage>

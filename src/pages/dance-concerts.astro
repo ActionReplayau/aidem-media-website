@@ -1,0 +1,22 @@
+---
+import ServicePage from '../components/ServicePage.astro';
+import Ph from '../components/Ph.astro';
+---
+<ServicePage slug="dance-concerts" heading="Your end-of-year show,<br>filmed in full." description="Dance concert filming for dance schools in Melbourne's south-east." showOrder bookLabel="Book your show">
+  <Ph slot="lead">Every routine, filmed from start to finish, so dancers and their families can watch the show again.</Ph>
+
+  <section class="no-top">
+    <div class="wrap stack" style="gap:32px">
+      <h2>For dance schools</h2>
+      <div class="facts">
+        <div><span class="label">Filming</span><p><Ph>The full show, every routine, filmed from the back of the theatre.</Ph></p></div>
+        <div><span class="label">Ordering</span><p><Ph>Families order their own copy online.</Ph></p></div>
+        <div><span class="label">Delivery</span><p><Ph>Delivered by download.</Ph></p></div>
+        <div><span class="label">Multiple shows</span><p><Ph>Running more than one performance? Tell us and we'll film each one.</Ph></p></div>
+      </div>
+    </div>
+  </section>
+
+  <Fragment slot="cta-heading">Planning this year's concert?</Fragment>
+  <Ph slot="cta-text">Tell us your show dates and venue and we'll send through the details.</Ph>
+</ServicePage>

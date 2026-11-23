@@ -1,0 +1,71 @@
+---
+import '../styles/global.css';
+import { site, services } from '../site';
+
+interface Props { title: string; description: string; current?: string }
+const { title, description, current = '' } = Astro.props;
+const fullTitle = current === 'home' ? `${site.name} · ${title}` : `${title} · ${site.name}`;
+const nav = [
+  ...services.map((s) => ({ href: `/${s.slug}/`, label: s.slug === 'corporate' ? 'Corporate' : s.name, key: s.slug })),
+  { href: '/contact/', label: 'Contact', key: 'contact' },
+];
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL('/images/hero.jpg', Astro.site)} />
+  <meta property="og:locale" content="en_AU" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600;700&display=swap" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site">
+    <div class="wrap">
+      <a class="logo" href="/" aria-label="Aidem Media home"><img src="/images/aidem-media-logo.png" alt="Aidem Media" width="175" height="46" /></a>
+      <nav class="main" aria-label="Main">
+        {nav.map((n) => <a href={n.href} aria-current={current === n.key ? 'page' : undefined}>{n.label}</a>)}
+      </nav>
+      <a class="btn btn-sm" href={site.orderUrl}>Order a concert</a>
+      <details class="menu">
+        <summary>Menu</summary>
+        <nav aria-label="Main">
+          {nav.map((n) => <a href={n.href} aria-current={current === n.key ? 'page' : undefined}>{n.label}</a>)}
+          <a class="btn" href={site.orderUrl}>Order a concert</a>
+        </nav>
+      </details>
+    </div>
+  </header>
+
+  <main id="main"><slot /></main>
+
+  <footer>
+    <div class="wrap">
+      <div class="stack">
+        <strong style="color:var(--band-fg)">{site.name}</strong>
+        <span>{site.location}</span>
+      </div>
+      <div class="stack">
+        <span class="label">Contact</span>
+        <a href={site.phoneHref}>{site.phone}</a>
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+      <div class="stack">
+        <span class="label">Also from Aidem Media</span>
+        <a href={site.actionReplayUrl}>Action Replay: video, film and audio conversions</a>
+      </div>
+      <div class="small">© {new Date().getFullYear()} Aidem Media Pty Ltd · ABN {site.abn} · <a href="/privacy/">Privacy policy</a></div>
+    </div>
+  </footer>
+</body>
+</html>

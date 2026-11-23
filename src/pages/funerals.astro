@@ -1,0 +1,22 @@
+---
+import ServicePage from '../components/ServicePage.astro';
+import Ph from '../components/Ph.astro';
+---
+<ServicePage slug="funerals" heading="Quiet, respectful<br>filming of a service." description="Funeral filming in Melbourne's south-east, so family and friends who can't attend can watch the service." bookLabel="Talk to us">
+  <Ph slot="lead">For family and friends who can't be there, we film the service discreetly and deliver it privately afterwards.</Ph>
+
+  <section class="no-top">
+    <div class="wrap stack" style="gap:32px">
+      <h2>What to expect</h2>
+      <div class="facts">
+        <div><span class="label">On the day</span><p><Ph>We arrive early, set up quietly and stay out of the way of the service.</Ph></p></div>
+        <div><span class="label">Working with your funeral director</span><p><Ph>We can liaise with the funeral director and venue on your behalf.</Ph></p></div>
+        <div><span class="label">Delivery</span><p>Delivered by private download link, to share with family near and far.</p></div>
+        <div><span class="label">Privacy</span><p><Ph>The video is shared only with the people you choose.</Ph></p></div>
+      </div>
+    </div>
+  </section>
+
+  <Fragment slot="cta-heading">We're here when you need us.</Fragment>
+  <Ph slot="cta-text">Call or email with the date and venue of the service, and we'll take care of the filming.</Ph>
+</ServicePage>
