@@ -316,7 +316,7 @@
             <label class="field">USB price (incl. GST)<input name="price_usb" value="${dollars(c.price_usb)}" inputmode="decimal"></label>
             <label class="field">Download price (incl. GST)<input name="price_download" value="${dollars(c.price_download)}" inputmode="decimal"></label>
           </div>
-          <label class="check"><input type="checkbox" name="usb_enabled" ${c.usb_enabled ? 'checked' : ''}> Take USB orders (bulk period with student name and class)</label>
+          <label class="check"><input type="checkbox" name="usb_enabled" ${c.usb_enabled ? 'checked' : ''}> Take USB orders (bulk period with student name and class). Untick for a download-only concert.</label>
           <div class="grid2">
             <label class="field">Last day for USB orders<span class="hint">After this day it switches to download only and links are emailed automatically.</span><input type="date" name="usb_cutoff" value="${esc(c.usb_cutoff || '')}"></label>
             <label class="field">Stop all orders after (optional)<input type="date" name="orders_close" value="${esc(c.orders_close || '')}"></label>

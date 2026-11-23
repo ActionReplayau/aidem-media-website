@@ -19,6 +19,7 @@ export const onRequestPost: PagesFunction<Env> = ({ env, request, params }) => h
     bulk,
     usbCutoff: bulk && c.usb_cutoff ? longDate(c.usb_cutoff) : null,
     usbAvailable: bulk,
+    usbOffered: !!c.usb_enabled,
     prices: { usb: c.price_usb, download: c.price_download },
     nights: nights.length > 1 ? nights.map((n) => ({ id: n.id, label: n.label })) : [],
     singleNight: nights.length === 1 ? nights[0].label : null,
