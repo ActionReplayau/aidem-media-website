@@ -167,6 +167,12 @@ export function isBulk(c: Concert, day = today()): boolean {
   return !!c.usb_enabled && (!c.usb_cutoff || day <= c.usb_cutoff);
 }
 
+// Student name and class are asked for during the USB bulk period, and always on download-only concerts
+// (a backup so every order can be matched to a family and class).
+export function asksStudent(c: Concert, day = today()): boolean {
+  return isBulk(c, day) || !c.usb_enabled;
+}
+
 export function isOpen(c: Concert, day = today()): boolean {
   return !!c.visible && (!c.orders_close || day <= c.orders_close);
 }

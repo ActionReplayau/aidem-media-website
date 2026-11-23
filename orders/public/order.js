@@ -77,7 +77,8 @@
     $('opt-usb').hidden = !c.usbAvailable;
     // "USB orders have closed" only shows when USBs were offered and the cut-off has passed.
     $('usb-closed').hidden = c.usbAvailable || !c.usbOffered;
-    $('student-fields').hidden = !c.bulk;
+    $('student-fields').hidden = !c.askStudent;
+    $('klass-hint').textContent = c.usbAvailable ? 'For example 3B. We use this to send USBs home with the right class.' : 'For example 3B.';
     $('nights-box').hidden = !c.nights.length;
     $('nights').innerHTML = c.nights.map((n) => `<label class="check"><input type="checkbox" name="night" value="${n.id}"> ${esc(n.label)}</label>`).join('');
     const pick = c.classes && c.classes.length;
@@ -156,7 +157,7 @@
     $('summary').innerHTML = `
       <div><span>Concert</span><span>${esc(c.school)}, ${esc(c.title)}</span></div>
       ${nightLabels.length ? `<div><span>${nightLabels.length > 1 ? 'Nights' : 'Night'}</span><span>${esc(nightLabels.join(', '))}</span></div>` : c.singleNight ? `<div><span>Night</span><span>${esc(c.singleNight)}</span></div>` : ''}
-      ${c.bulk ? `<div><span>Student</span><span>${esc(v.student)}, ${esc(v.klass.toUpperCase())}</span></div>` : ''}
+      ${c.askStudent ? `<div><span>Student</span><span>${esc(v.student)}, ${esc(v.klass.toUpperCase())}</span></div>` : ''}
       <div><span>Format</span><span>${v.format === 'usb' ? 'USB' : 'Download'}</span></div>
       <div><span>Email</span><span>${esc(v.email)}</span></div>
       ${q.discount ? `<div><span>Subtotal</span><span>${money(q.subtotal)}</span></div><div class="disc"><span>Discount (${esc(q.discountCode)})</span><span>−${money(q.discount)}</span></div>` : ''}
@@ -206,8 +207,8 @@
     const v = formValues(), c = concert, problems = [];
     if (c.nights.length && !v.nights.length) problems.push('tick at least one night');
     if (!v.format) problems.push('choose USB or download');
-    if (c.bulk && !v.student) problems.push("enter the eldest student's name");
-    if (c.bulk && !v.klass) problems.push('choose the class');
+    if (c.askStudent && !v.student) problems.push("enter the eldest student's name");
+    if (c.askStudent && !v.klass) problems.push('choose the class');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email)) problems.push('enter a valid email');
     if (problems.length) { $('order-err').textContent = 'Please ' + problems.join(', ') + '.'; $('order-err').hidden = false; return; }
     try {

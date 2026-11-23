@@ -316,7 +316,7 @@
             <label class="field">USB price (incl. GST)<input name="price_usb" value="${dollars(c.price_usb)}" inputmode="decimal"></label>
             <label class="field">Download price (incl. GST)<input name="price_download" value="${dollars(c.price_download)}" inputmode="decimal"></label>
           </div>
-          <label class="check"><input type="checkbox" name="usb_enabled" ${c.usb_enabled ? 'checked' : ''}> Take USB orders (bulk period with student name and class). Untick for a download-only concert.</label>
+          <label class="check"><input type="checkbox" name="usb_enabled" ${c.usb_enabled ? 'checked' : ''}> Take USB orders (bulk period with student name and class). Untick for a download-only concert (parents still give the student name and class).</label>
           <div class="grid2">
             <label class="field">Last day for USB orders<span class="hint">After this day it switches to download only and links are emailed automatically.</span><input type="date" name="usb_cutoff" value="${esc(c.usb_cutoff || '')}"></label>
             <label class="field">Stop all orders after (optional)<input type="date" name="orders_close" value="${esc(c.orders_close || '')}"></label>
@@ -437,7 +437,7 @@
     const names = Object.keys(groups).sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
     app.innerHTML = `
       <div class="row noprint"><a class="back" href="#concerts/${id}">Back</a><button class="btn sm" id="print">Print</button>
-        <label class="check small"><input type="checkbox" id="usb-only" checked> USB orders only (for sending USBs home)</label></div>
+        <label class="check small"><input type="checkbox" id="usb-only" ${r.rows.some((o) => o.format === 'usb') ? 'checked' : ''}> USB orders only (for sending USBs home)</label></div>
       <div class="stack"><span class="label">${esc(r.concert.school)}</span><h1>${esc(r.concert.title)}${r.night ? ' · ' + esc(r.night) : ''}</h1><p class="muted">Class list · ${r.rows.length} paid orders</p></div>
       <div id="groups"></div>`;
     const render = () => {

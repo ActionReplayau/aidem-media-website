@@ -1,5 +1,5 @@
 import type { Env } from '../../../../lib/env';
-import { ensureSchema, getNights, hasPdf, isBulk } from '../../../../lib/db';
+import { asksStudent, ensureSchema, getNights, hasPdf, isBulk } from '../../../../lib/db';
 import { classList, unlockConcert } from '../../../../lib/pricing';
 import { handle, json, longDate, readJson } from '../../../../lib/util';
 
@@ -20,6 +20,7 @@ export const onRequestPost: PagesFunction<Env> = ({ env, request, params }) => h
     usbCutoff: bulk && c.usb_cutoff ? longDate(c.usb_cutoff) : null,
     usbAvailable: bulk,
     usbOffered: !!c.usb_enabled,
+    askStudent: asksStudent(c),
     prices: { usb: c.price_usb, download: c.price_download },
     nights: nights.length > 1 ? nights.map((n) => ({ id: n.id, label: n.label })) : [],
     singleNight: nights.length === 1 ? nights[0].label : null,

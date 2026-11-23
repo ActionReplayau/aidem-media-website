@@ -1,5 +1,5 @@
 import type { Env } from './env';
-import { getConcert, getNights, isBulk, isOpen, type Concert, type Night } from './db';
+import { asksStudent, getConcert, getNights, isBulk, isOpen, type Concert, type Night } from './db';
 import { clean, fail, isEmail, safeEqual } from './util';
 
 export interface OrderInput {
@@ -48,6 +48,7 @@ export async function quote(env: Env, input: OrderInput, { strict, ip = '' }: { 
   const c = await unlockConcert(env, input.concertId, input.code, ip);
   const nights = await getNights(env, c.id);
   const bulk = isBulk(c);
+  const askStudent = asksStudent(c);
   const problems: string[] = [];
 
   const format = input.format === 'usb' && bulk ? 'usb' : input.format === 'download' ? 'download' : null;
@@ -64,7 +65,7 @@ export async function quote(env: Env, input: OrderInput, { strict, ip = '' }: { 
 
   const student = clean(input.student, 80);
   let klass = clean(input.klass, 30).toUpperCase();
-  if (bulk) {
+  if (askStudent) {
     if (!student) problems.push("enter the eldest student's name");
     if (!klass) problems.push('enter the class');
     const list = classList(c);
@@ -99,7 +100,7 @@ export async function quote(env: Env, input: OrderInput, { strict, ip = '' }: { 
 
   return {
     concert: c, nights, chosen, bulk, format: format as 'usb' | 'download' | null,
-    student: bulk ? student : null, klass: bulk ? klass : null, email,
+    student: askStudent ? student : null, klass: askStudent ? klass : null, email,
     qty, unit, subtotal, discount, discountCode, discountError, total: subtotal - discount, problems,
   };
 }
