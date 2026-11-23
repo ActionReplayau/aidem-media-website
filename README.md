@@ -33,6 +33,8 @@ Set these under Cloudflare Pages > aidem-media-website > Settings > Variables an
 - `TO_EMAIL` (optional, default info@aidemmedia.com.au)
 - `FROM_EMAIL` (optional, default website@aidemmedia.com.au; must be on a domain verified in Resend)
 
+After adding or changing a variable, redeploy (Deployments > latest production > More actions > Retry deployment) or push a commit.
+
 ## Cloudflare Pages settings
 
 - Framework preset: Astro
